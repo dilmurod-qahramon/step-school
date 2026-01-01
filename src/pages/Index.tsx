@@ -2,6 +2,7 @@ import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import HeroSection from '@/components/landing/HeroSection';
 import AboutSection from '@/components/landing/AboutSection';
 import CoursesSection from '@/components/landing/CoursesSection';
+import InstructorsSection from '@/components/landing/InstructorsSection';
 import ResultsSection from '@/components/landing/ResultsSection';
 import ContactSection from '@/components/landing/ContactSection';
 import Footer from '@/components/landing/Footer';
@@ -38,6 +39,7 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <CoursesSection />
+      <InstructorsSection />
       <ResultsSection />
       <ContactSection />
       <Footer />
