@@ -1,13 +1,47 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
+import HeroSection from '@/components/landing/HeroSection';
+import AboutSection from '@/components/landing/AboutSection';
+import CoursesSection from '@/components/landing/CoursesSection';
+import ResultsSection from '@/components/landing/ResultsSection';
+import ContactSection from '@/components/landing/ContactSection';
+import Footer from '@/components/landing/Footer';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#144172',
+      dark: '#0d2d4f',
+      light: '#1e5a9a',
+    },
+    background: {
+      default: '#ffffff',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 700,
+    },
+  },
+  shape: {
+    borderRadius: 8,
+  },
+});
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <HeroSection />
+      <AboutSection />
+      <CoursesSection />
+      <ResultsSection />
+      <ContactSection />
+      <Footer />
+    </ThemeProvider>
   );
 };
 
