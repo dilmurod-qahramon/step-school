@@ -69,6 +69,8 @@ const CoursesSection = () => {
                   border: '2px solid #e2e8f0',
                   transition: 'all 0.3s ease',
                   overflow: 'visible',
+                  display: 'flex',
+                  flexDirection: 'column',
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: '0 25px 50px rgba(20, 65, 114, 0.15)',
@@ -76,7 +78,7 @@ const CoursesSection = () => {
                   },
                 }}
               >
-                <CardContent sx={{ p: 4 }}>
+                <CardContent sx={{ p: 4, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -132,7 +134,7 @@ const CoursesSection = () => {
                     {course.description}
                   </Typography>
 
-                  <Box sx={{ mb: 3 }}>
+                  <Box sx={{ mb: 3, flexGrow: 1 }}>
                     {course.features.map((feature, idx) => (
                       <Chip
                         key={idx}
@@ -159,6 +161,7 @@ const CoursesSection = () => {
                       textTransform: 'none',
                       fontWeight: 600,
                       borderRadius: 2,
+                      mt: 'auto',
                       '&:hover': {
                         bgcolor: '#144172',
                         color: 'white',
