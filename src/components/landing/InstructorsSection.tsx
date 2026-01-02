@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Grid, Card, CardContent, Avatar, Chip } from '@mui/material';
+import { Box, Container, Typography, Card, CardContent, Avatar, Chip } from '@mui/material';
 
 const instructors = [
   {
@@ -70,110 +70,139 @@ const InstructorsSection = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 3,
+            overflowX: 'auto',
+            pb: 2,
+            px: { xs: 2, md: 0 },
+            mx: { xs: -2, md: 0 },
+            scrollSnapType: 'x mandatory',
+            '&::-webkit-scrollbar': {
+              height: 8,
+            },
+            '&::-webkit-scrollbar-track': {
+              bgcolor: '#e2e8f0',
+              borderRadius: 4,
+            },
+            '&::-webkit-scrollbar-thumb': {
+              bgcolor: '#144172',
+              borderRadius: 4,
+              '&:hover': {
+                bgcolor: '#0d2d4f',
+              },
+            },
+          }}
+        >
           {instructors.map((instructor, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-              <Card
-                elevation={0}
-                sx={{
-                  height: '100%',
-                  borderRadius: 4,
-                  border: '1px solid #e2e8f0',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease',
-                  overflow: 'visible',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 25px 50px rgba(20, 65, 114, 0.15)',
-                    borderColor: '#144172',
-                  },
-                }}
-              >
-                <CardContent sx={{ p: 3 }}>
-                  {/* Avatar with IELTS badge */}
-                  <Box sx={{ position: 'relative', display: 'inline-block', mb: 3 }}>
-                    <Avatar
-                      src={instructor.image}
-                      alt={instructor.name}
+            <Card
+              key={index}
+              elevation={0}
+              sx={{
+                minWidth: { xs: 260, sm: 280 },
+                maxWidth: { xs: 260, sm: 280 },
+                flexShrink: 0,
+                scrollSnapAlign: 'start',
+                borderRadius: 4,
+                border: '1px solid #e2e8f0',
+                textAlign: 'center',
+                transition: 'all 0.3s ease',
+                overflow: 'visible',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 25px 50px rgba(20, 65, 114, 0.15)',
+                  borderColor: '#144172',
+                },
+              }}
+            >
+              <CardContent sx={{ p: 3 }}>
+                {/* Avatar with IELTS badge */}
+                <Box sx={{ position: 'relative', display: 'inline-block', mb: 3 }}>
+                  <Avatar
+                    src={instructor.image}
+                    alt={instructor.name}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      mx: 'auto',
+                      border: '4px solid #144172',
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: -8,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      bgcolor: '#144172',
+                      color: 'white',
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: 2,
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      boxShadow: '0 4px 12px rgba(20, 65, 114, 0.3)',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    IELTS {instructor.ieltsScore}
+                  </Box>
+                </Box>
+
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#1e293b',
+                    mb: 0.5,
+                    fontSize: '1rem',
+                  }}
+                >
+                  {instructor.name}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: '#144172',
+                    fontWeight: 600,
+                    mb: 1,
+                    fontSize: '0.85rem',
+                  }}
+                >
+                  {instructor.role}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: '#64748b',
+                    mb: 2,
+                    fontSize: '0.8rem',
+                  }}
+                >
+                  {instructor.experience}
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
+                  {instructor.skills.map((skill, idx) => (
+                    <Chip
+                      key={idx}
+                      label={skill}
+                      size="small"
                       sx={{
-                        width: 120,
-                        height: 120,
-                        mx: 'auto',
-                        border: '4px solid #144172',
+                        bgcolor: '#e0f2fe',
+                        color: '#0369a1',
+                        fontSize: '0.7rem',
                       }}
                     />
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: -8,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        bgcolor: '#144172',
-                        color: 'white',
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: 2,
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        boxShadow: '0 4px 12px rgba(20, 65, 114, 0.3)',
-                      }}
-                    >
-                      IELTS {instructor.ieltsScore}
-                    </Box>
-                  </Box>
-
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 700,
-                      color: '#1e293b',
-                      mb: 0.5,
-                    }}
-                  >
-                    {instructor.name}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#144172',
-                      fontWeight: 600,
-                      mb: 1,
-                    }}
-                  >
-                    {instructor.role}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: '#64748b',
-                      mb: 2,
-                    }}
-                  >
-                    {instructor.experience}
-                  </Typography>
-
-                  <Box>
-                    {instructor.skills.map((skill, idx) => (
-                      <Chip
-                        key={idx}
-                        label={skill}
-                        size="small"
-                        sx={{
-                          m: 0.25,
-                          bgcolor: '#e0f2fe',
-                          color: '#0369a1',
-                          fontSize: '0.75rem',
-                        }}
-                      />
-                    ))}
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
+                  ))}
+                </Box>
+              </CardContent>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );
