@@ -68,19 +68,32 @@ const HeroSection = () => {
       >
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Box
-                component="img"
-                src={logo}
-                alt="Step School"
-                sx={{ height: 40 }}
-              />
+                sx={{
+                  bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: 2,
+                  p: 0.75,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                }}
+              >
+                <Box
+                  component="img"
+                  src={logo}
+                  alt="Step School"
+                  sx={{ height: 32 }}
+                />
+              </Box>
               <Typography 
                 variant="h6" 
                 sx={{ 
                   color: 'white', 
                   fontWeight: 700,
-                  display: { xs: 'none', sm: 'block' }
+                  display: { xs: 'none', sm: 'block' },
+                  letterSpacing: 0.5,
                 }}
               >
                 Step School
@@ -328,18 +341,29 @@ const HeroSection = () => {
               }}
             />
             <Box
-              component="img"
-              src={logo}
-              alt="Step School Logo"
               sx={{
-                maxWidth: { xs: 250, md: 380 },
-                width: '100%',
-                height: 'auto',
                 position: 'relative',
                 zIndex: 1,
-                filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3))',
+                bgcolor: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: 6,
+                p: { xs: 4, md: 6 },
+                border: '2px solid rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
               }}
-            />
+            >
+              <Box
+                component="img"
+                src={logo}
+                alt="Step School Logo"
+                sx={{
+                  maxWidth: { xs: 180, md: 280 },
+                  width: '100%',
+                  height: 'auto',
+                  filter: 'drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2))',
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Container>
