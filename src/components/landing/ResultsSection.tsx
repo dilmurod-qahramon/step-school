@@ -68,7 +68,7 @@ const ResultsSection = () => {
 
         <Grid container spacing={3}>
           {stats.map((stat, index) => (
-            <Grid size={{ xs: 6, md: 3 }} key={index}>
+            <Grid size={{ xs: 6, md: 3 }} key={index} sx={{ display: 'flex' }}>
               <Paper
                 elevation={0}
                 sx={{
@@ -79,6 +79,11 @@ const ResultsSection = () => {
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   transition: 'all 0.3s ease',
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   '&:hover': {
                     transform: 'translateY(-5px)',
                     bgcolor: 'rgba(255, 255, 255, 0.15)',
