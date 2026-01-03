@@ -70,23 +70,11 @@ const HeroSection = () => {
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Box
-                sx={{
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius: 2,
-                  p: 0.75,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                }}
-              >
-                <Box
-                  component="img"
-                  src={logo}
-                  alt="Step School"
-                  sx={{ height: 32 }}
-                />
-              </Box>
+                component="img"
+                src={logo}
+                alt="Step School"
+                sx={{ height: 36 }}
+              />
               <Typography 
                 variant="h6" 
                 sx={{ 
