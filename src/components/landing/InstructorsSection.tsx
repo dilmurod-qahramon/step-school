@@ -75,6 +75,8 @@ const InstructorsSection = () => {
             display: 'flex',
             gap: 3,
             overflowX: 'auto',
+            overflowY: 'visible',
+            pt: 2,
             pb: 2,
             px: { xs: 2, md: 0 },
             mx: { xs: -2, md: 0 },
