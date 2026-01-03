@@ -313,7 +313,7 @@ const HeroSection = () => {
           <Box
             sx={{
               flex: 1,
-              display: 'flex',
+              display: { xs: 'none', md: 'flex' },
               justifyContent: 'center',
               position: 'relative',
             }}
@@ -321,37 +321,26 @@ const HeroSection = () => {
             <Box
               sx={{
                 position: 'absolute',
-                width: { xs: 280, md: 400 },
-                height: { xs: 280, md: 400 },
+                width: 400,
+                height: 400,
                 borderRadius: '50%',
                 background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
                 filter: 'blur(40px)',
               }}
             />
             <Box
+              component="img"
+              src={logo}
+              alt="Step School Logo"
               sx={{
                 position: 'relative',
                 zIndex: 1,
-                bgcolor: 'rgba(255, 255, 255, 0.08)',
-                borderRadius: 6,
-                p: { xs: 4, md: 6 },
-                border: '2px solid rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
+                maxWidth: 320,
+                width: '100%',
+                height: 'auto',
+                filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3))',
               }}
-            >
-              <Box
-                component="img"
-                src={logo}
-                alt="Step School Logo"
-                sx={{
-                  maxWidth: { xs: 180, md: 280 },
-                  width: '100%',
-                  height: 'auto',
-                  filter: 'drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2))',
-                }}
-              />
-            </Box>
+            />
           </Box>
         </Box>
       </Container>
