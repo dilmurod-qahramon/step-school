@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -26,14 +26,14 @@ const TIME_SLOTS = [
 ];
 
 const TimeSlotTable = ({ 
-  teacherId, 
-  teacherName, 
   bookedSlots, 
   onSlotSelect,
   isLoading 
 }: TimeSlotTableProps) => {
-  const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
-  
+  const initialWeekStart = useRef(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [weekStart, setWeekStart] = useState(initialWeekStart.current);
+  const [hasMovedNext, setHasMovedNext] = useState(false);
+
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   const isSlotBooked = (date: Date, time: string): TimeSlot | undefined => {
@@ -49,12 +49,9 @@ const TimeSlotTable = ({
     return slotDate < now;
   };
 
-  const handlePrevWeek = () => {
-    setWeekStart(prev => addDays(prev, -7));
-  };
-
   const handleNextWeek = () => {
     setWeekStart(prev => addDays(prev, 7));
+    setHasMovedNext(true);
   };
 
   if (isLoading) {
@@ -70,21 +67,17 @@ const TimeSlotTable = ({
     <div className="w-full">
       {/* Week Navigation */}
       <div className="flex items-center justify-between mb-4">
-        <button
-          onClick={handlePrevWeek}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
-          ← Oldingi hafta
-        </button>
         <span className="font-semibold text-foreground">
           {format(weekStart, 'd MMMM', { locale: uz })} - {format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: uz })}
         </span>
-        <button
-          onClick={handleNextWeek}
-          className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
-          Keyingi hafta →
-        </button>
+        {!hasMovedNext && (
+          <button
+            onClick={handleNextWeek}
+            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Keyingi hafta →
+          </button>
+        )}
       </div>
 
       {/* Time Slot Grid */}

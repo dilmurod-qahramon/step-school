@@ -3,10 +3,7 @@ import type { TimeSlot } from '@/components/booking/TimeSlotTable';
 import type { BookingFormData } from '@/components/booking/BookingDialog';
 
 // Google Apps Script Web App URL - Replace with your deployed script URL
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/exec';
-
-// Spreadsheet ID provided by user
-const SPREADSHEET_ID = '1krgPRbY2WPguupYHFUvGa5mxS4tseXKM2h-W6qzkHeQ';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2lGVBj8CYZY-hjdctlaAhTqIWfyplr6D5roHITaF4brngSjEainkEc5vS_5okjLbf/exec';
 
 interface UseBookingSlotsProps {
   teacherId: string;
@@ -25,7 +22,7 @@ export const useBookingSlots = ({ teacherId, teacherName }: UseBookingSlotsProps
 
     try {
       const response = await fetch(
-        `${APPS_SCRIPT_URL}?action=getBookings&teacherId=${teacherId}&spreadsheetId=${SPREADSHEET_ID}`,
+        `${APPS_SCRIPT_URL}?action=getBookings&teacherId=${teacherId}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -73,7 +70,6 @@ export const useBookingSlots = ({ teacherId, teacherName }: UseBookingSlotsProps
         },
         body: JSON.stringify({
           action: 'createBooking',
-          spreadsheetId: SPREADSHEET_ID,
           teacherId,
           teacherName,
           date,
