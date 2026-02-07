@@ -1,8 +1,8 @@
 import { Box, Container, Typography, Link, Stack } from '@mui/material';
+import logo from '../../assets/step_school_logo.JPG';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
-import logo from '@/assets/step_school_logo-white.png';
 
 const Footer = () => {
   return (
@@ -62,14 +62,27 @@ const Footer = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <PhoneIcon sx={{ fontSize: 20, opacity: 0.8 }} />
                 <Link
-                  href="tel:+998901234567"
+                  href="tel:+998991414948"
                   sx={{
                     color: 'rgba(255, 255, 255, 0.8)',
                     textDecoration: 'none',
                     '&:hover': { color: 'white' },
                   }}
                 >
-                  +998 90 123 45 67
+                  +998 99-141-49-48
+                </Link>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                <PhoneIcon sx={{ fontSize: 20, opacity: 0.8 }} />
+                <Link
+                  href="tel:+998901314948"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    textDecoration: 'none',
+                    '&:hover': { color: 'white' },
+                  }}
+                >
+                  +998 90-131-49-48
                 </Link>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
@@ -88,7 +101,7 @@ const Footer = () => {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <LocationOnIcon sx={{ fontSize: 20, opacity: 0.8 }} />
                 <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  Toshkent shahri
+                  Nurafshon shahri
                 </Typography>
               </Box>
             </Stack>

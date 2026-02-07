@@ -13,7 +13,7 @@ const stats = [
   },
   {
     icon: <GroupsIcon sx={{ fontSize: 40 }} />,
-    value: '500+',
+    value: '900+',
     label: 'O\'quvchilar',
     description: 'Bizga ishonch bildirdi',
   },

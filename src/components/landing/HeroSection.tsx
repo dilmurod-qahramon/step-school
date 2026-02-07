@@ -1,7 +1,7 @@
 import { Box, Container, Typography, Button, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
-import logo from '@/assets/step_school_logo-white.png';
+import logo from '../../assets/step_school_logo.JPG';
 
 const navLinks = [
   { label: "Biz haqimizda", target: "about" },

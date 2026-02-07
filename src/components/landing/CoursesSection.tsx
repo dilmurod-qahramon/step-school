@@ -17,6 +17,13 @@ const courses = [
     features: ["Reading strategiyalari", "Writing Task 1 & 2", "Speaking practice", "Listening skills"],
     level: "7.0+ maqsad",
   },
+   {
+    icon: <DescriptionIcon sx={{ fontSize: 56 }} />,
+    title: "CEFR Tayyorlov",
+    description: "CEFR imtihoniga professional tayyorgarlik. To'rtta bo'lim bo'yicha chuqur bilim va strategiyalar.",
+    features: ["Reading strategiyalari", "Writing best practices", "Speaking practice", "Listening skills"],
+    level: "B2+ maqsad",
+  },
 ];
 
 const CoursesSection = () => {
