@@ -1,217 +1,158 @@
-import { Box, Container, Typography, TextField, Button, AppBar, Toolbar, IconButton, Card, CardContent, Alert } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import PersonIcon from '@mui/icons-material/Person';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { ArrowLeft, User, CheckCircle } from 'lucide-react';
+import TimeSlotTable from '@/components/booking/TimeSlotTable';
+import BookingDialog, { BookingFormData } from '@/components/booking/BookingDialog';
+import { useBookingSlots } from '@/hooks/useBookingSlots';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 const BookMeeting = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { teacherId } = useParams();
   const teacherName = location.state?.teacherName || 'O\'qituvchi';
-  
-  const [formData, setFormData] = useState({
-    studentName: '',
-    phone: '',
-    preferredDate: '',
-    preferredTime: '',
-    message: '',
+
+  const [selectedSlot, setSelectedSlot] = useState<{ date: string; time: string } | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const { bookedSlots, isLoading, createBooking } = useBookingSlots({
+    teacherId: teacherId || '',
+    teacherName,
   });
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSlotSelect = (date: string, time: string) => {
+    setSelectedSlot({ date, time });
+    setIsDialogOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the data to a backend
-    console.log('Meeting request:', { teacherId, teacherName, ...formData });
-    setSubmitted(true);
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setSelectedSlot(null);
   };
 
-  if (submitted) {
+  const handleBookingSubmit = async (formData: BookingFormData) => {
+    if (!selectedSlot) return;
+
+    setIsSubmitting(true);
+    try {
+      await createBooking(selectedSlot.date, selectedSlot.time, formData);
+      setIsDialogOpen(false);
+      setSelectedSlot(null);
+      setIsSuccess(true);
+    } catch (error) {
+      console.error('Booking failed:', error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isSuccess) {
     return (
-      <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
-        <AppBar 
-          position="fixed" 
-          elevation={0}
-          sx={{ bgcolor: '#144172' }}
-        >
-          <Container maxWidth="lg">
-            <Toolbar disableGutters>
-              <IconButton 
-                onClick={() => navigate('/')} 
-                sx={{ color: 'white', mr: 2 }}
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <header className="fixed top-0 left-0 right-0 z-50 bg-primary">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center h-16">
+              <button
+                onClick={() => navigate('/')}
+                className="text-primary-foreground mr-4 p-2 hover:bg-primary/90 rounded-lg transition-colors"
               >
-                <ArrowBackIcon />
-              </IconButton>
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h1 className="text-lg font-bold text-primary-foreground">
                 Uchrashuv belgilash
-              </Typography>
-            </Toolbar>
-          </Container>
-        </AppBar>
+              </h1>
+            </div>
+          </div>
+        </header>
 
-        <Container maxWidth="sm" sx={{ pt: 16, pb: 6 }}>
-          <Card elevation={0} sx={{ borderRadius: 4, textAlign: 'center', p: 4 }}>
-            <CheckCircleIcon sx={{ fontSize: 80, color: '#22c55e', mb: 2 }} />
-            <Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b', mb: 2 }}>
-              So'rovingiz qabul qilindi!
-            </Typography>
-            <Typography variant="body1" sx={{ color: '#64748b', mb: 4 }}>
-              {teacherName} bilan uchrashuv so'rovi yuborildi. Tez orada siz bilan bog'lanamiz.
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={() => navigate('/')}
-              sx={{
-                bgcolor: '#144172',
-                px: 4,
-                py: 1.5,
-                borderRadius: 2,
-                textTransform: 'none',
-                fontWeight: 600,
-                '&:hover': { bgcolor: '#0d2d4f' },
-              }}
-            >
-              Bosh sahifaga qaytish
-            </Button>
+        <div className="container mx-auto px-4 pt-24 pb-8 max-w-lg">
+          <Card className="text-center">
+            <CardContent className="pt-8 pb-8">
+              <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-foreground mb-2">
+                So'rovingiz qabul qilindi!
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                {teacherName} bilan uchrashuv so'rovi yuborildi. Tez orada siz bilan bog'lanamiz.
+              </p>
+              <Button onClick={() => navigate('/')}>
+                Bosh sahifaga qaytish
+              </Button>
+            </CardContent>
           </Card>
-        </Container>
-      </Box>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f8fafc' }}>
-      <AppBar 
-        position="fixed" 
-        elevation={0}
-        sx={{ bgcolor: '#144172' }}
-      >
-        <Container maxWidth="lg">
-          <Toolbar disableGutters>
-            <IconButton 
-              onClick={() => navigate('/support-teachers')} 
-              sx={{ color: 'white', mr: 2 }}
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-primary">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center h-16">
+            <button
+              onClick={() => navigate('/support-teachers')}
+              className="text-primary-foreground mr-4 p-2 hover:bg-primary/90 rounded-lg transition-colors"
             >
-              <ArrowBackIcon />
-            </IconButton>
-            <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-lg font-bold text-primary-foreground">
               Uchrashuv belgilash
-            </Typography>
-          </Toolbar>
-        </Container>
-      </AppBar>
+            </h1>
+          </div>
+        </div>
+      </header>
 
-      <Container maxWidth="sm" sx={{ pt: 12, pb: 6 }}>
-        <Card elevation={0} sx={{ borderRadius: 4, overflow: 'visible' }}>
-          <CardContent sx={{ p: 4 }}>
+      <div className="container mx-auto px-4 pt-24 pb-8">
+        <Card className="mb-6">
+          <CardContent className="pt-6">
             {/* Teacher Info */}
-            <Box sx={{ textAlign: 'center', mb: 4 }}>
-              <Box
-                sx={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: '50%',
-                  bgcolor: '#144172',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mx: 'auto',
-                  mb: 2,
-                }}
-              >
-                <PersonIcon sx={{ fontSize: 50, color: 'white' }} />
-              </Box>
-              <Typography variant="h5" sx={{ fontWeight: 700, color: '#1e293b' }}>
-                {teacherName}
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#64748b' }}>
-                Support o'qituvchi
-              </Typography>
-            </Box>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
+                <User className="w-8 h-8 text-primary-foreground" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">{teacherName}</h2>
+                <p className="text-muted-foreground">Support o'qituvchi</p>
+              </div>
+            </div>
 
-            <Alert severity="info" sx={{ mb: 3, borderRadius: 2 }}>
-              Uchrashuv belgilash uchun quyidagi ma'lumotlarni to'ldiring
-            </Alert>
+            {/* Info Alert */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                Qulay vaqtni tanlang. Tanlangan vaqtda biz siz bilan bog'lanamiz.
+              </p>
+            </div>
 
-            <Box component="form" onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                label="Ismingiz"
-                name="studentName"
-                value={formData.studentName}
-                onChange={handleChange}
-                required
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Telefon raqamingiz"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                placeholder="+998 90 123 45 67"
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Qulay sana"
-                name="preferredDate"
-                type="date"
-                value={formData.preferredDate}
-                onChange={handleChange}
-                required
-                InputLabelProps={{ shrink: true }}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Qulay vaqt"
-                name="preferredTime"
-                type="time"
-                value={formData.preferredTime}
-                onChange={handleChange}
-                required
-                InputLabelProps={{ shrink: true }}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                label="Qo'shimcha xabar (ixtiyoriy)"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                multiline
-                rows={3}
-                sx={{ mb: 3 }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                size="large"
-                sx={{
-                  bgcolor: '#144172',
-                  py: 1.5,
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: '1.1rem',
-                  '&:hover': { bgcolor: '#0d2d4f' },
-                }}
-              >
-                Uchrashuv belgilash
-              </Button>
-            </Box>
+            {/* Time Slot Table */}
+            <TimeSlotTable
+              teacherId={teacherId || ''}
+              teacherName={teacherName}
+              bookedSlots={bookedSlots}
+              onSlotSelect={handleSlotSelect}
+              isLoading={isLoading}
+            />
           </CardContent>
         </Card>
-      </Container>
-    </Box>
+      </div>
+
+      {/* Booking Dialog */}
+      <BookingDialog
+        isOpen={isDialogOpen}
+        onClose={handleDialogClose}
+        teacherName={teacherName}
+        selectedDate={selectedSlot?.date || ''}
+        selectedTime={selectedSlot?.time || ''}
+        onSubmit={handleBookingSubmit}
+        isSubmitting={isSubmitting}
+      />
+    </div>
   );
 };
 
