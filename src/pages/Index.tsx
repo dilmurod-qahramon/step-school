@@ -38,9 +38,9 @@ const Index = () => {
       <CssBaseline />
       <HeroSection />
       <AboutSection />
+      <ResultsSection />
       <CoursesSection />
       <InstructorsSection />
-      <ResultsSection />
       <ContactSection />
       <Footer />
     </ThemeProvider>

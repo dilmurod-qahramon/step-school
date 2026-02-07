@@ -294,7 +294,7 @@ const HeroSection = () => {
                   transition: 'all 0.3s ease',
                 }}
               >
-                Uchrashuv belgilash
+                Support teacher band qilish
               </Button>
             </Box>
             <Box 
@@ -307,9 +307,9 @@ const HeroSection = () => {
               }}
             >
               {[
-                { value: '500+', label: "O'quvchilar" },
+                { value: '850+', label: "O'quvchilar" },
                 { value: '7.5+', label: "IELTS natija" },
-                { value: '5+', label: "Yillik tajriba" },
+                { value: '7+', label: "Yillik tajriba" },
               ].map((stat, index) => (
                 <Box key={index} sx={{ textAlign: 'center' }}>
                   <Typography 
@@ -361,7 +361,7 @@ const HeroSection = () => {
               sx={{
                 position: 'relative',
                 zIndex: 1,
-                maxWidth: 320,
+                maxWidth: 420,
                 width: '100%',
                 height: 'auto',
                 filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3))',

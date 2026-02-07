@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { format, addDays, startOfWeek, isSameDay } from 'date-fns';
+import { format, addDays, startOfWeek, isSameDay, isAfter, isBefore } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
@@ -32,7 +32,6 @@ const TimeSlotTable = ({
 }: TimeSlotTableProps) => {
   const initialWeekStart = useRef(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [weekStart, setWeekStart] = useState(initialWeekStart.current);
-  const [hasMovedNext, setHasMovedNext] = useState(false);
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
@@ -49,9 +48,19 @@ const TimeSlotTable = ({
     return slotDate < now;
   };
 
+  const maxWeekStart = addDays(initialWeekStart.current, 7);
+  const latestAllowedDate = addDays(initialWeekStart.current, 13); // end of next week
+  const canMoveNext = isBefore(weekStart, maxWeekStart);
+  const canMovePrev = isAfter(weekStart, initialWeekStart.current);
+
   const handleNextWeek = () => {
+    if (!canMoveNext) return;
     setWeekStart(prev => addDays(prev, 7));
-    setHasMovedNext(true);
+  };
+
+  const handlePrevWeek = () => {
+    if (!canMovePrev) return;
+    setWeekStart(prev => addDays(prev, -7));
   };
 
   if (isLoading) {
@@ -70,14 +79,28 @@ const TimeSlotTable = ({
         <span className="font-semibold text-foreground">
           {format(weekStart, 'd MMMM', { locale: uz })} - {format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: uz })}
         </span>
-        {!hasMovedNext && (
+        <div className="flex items-center gap-2">
+          {canMovePrev && (
+            <button
+              onClick={handlePrevWeek}
+              className="px-3 py-2 rounded-lg bg-muted text-muted-foreground hover:bg-muted/90 transition-colors"
+            >
+              ← Avvalgi hafta
+            </button>
+          )}
           <button
             onClick={handleNextWeek}
-            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            disabled={!canMoveNext}
+            className={cn(
+              "px-4 py-2 rounded-lg transition-colors",
+              canMoveNext
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-muted-foreground cursor-not-allowed"
+            )}
           >
             Keyingi hafta →
           </button>
-        )}
+        </div>
       </div>
 
       {/* Time Slot Grid */}
@@ -114,6 +137,7 @@ const TimeSlotTable = ({
                   const bookedSlot = isSlotBooked(day, time);
                   const isPast = isPastSlot(day, time);
                   const dateStr = format(day, 'yyyy-MM-dd');
+                  const isBeyondAllowed = isAfter(day, latestAllowedDate);
 
                   return (
                     <td 
@@ -133,6 +157,10 @@ const TimeSlotTable = ({
                       ) : isPast ? (
                         <div className="p-2 rounded bg-muted text-muted-foreground text-xs text-center cursor-not-allowed">
                           O'tgan
+                        </div>
+                      ) : isBeyondAllowed ? (
+                        <div className="p-2 rounded bg-muted text-muted-foreground text-xs text-center cursor-not-allowed">
+                          Mavjud emas
                         </div>
                       ) : (
                         <button
