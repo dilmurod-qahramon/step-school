@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Button, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/step_school_logo.JPG';
 
 const navLinks = [
@@ -13,6 +14,7 @@ const navLinks = [
 
 const HeroSection = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -21,6 +23,10 @@ const HeroSection = () => {
 
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const goToSupportTeachers = () => {
+    navigate('/support-teachers');
   };
 
   return (
@@ -268,9 +274,29 @@ const HeroSection = () => {
               >
                 Kurslarni ko'rish
               </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={goToSupportTeachers}
+                sx={{
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
+                  color: 'white',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: 'white',
+                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Uchrashuv belgilash
+              </Button>
             </Box>
-
-            {/* Stats */}
             <Box 
               sx={{ 
                 display: 'flex', 
