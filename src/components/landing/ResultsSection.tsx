@@ -66,7 +66,7 @@ const ResultsGallery = () => {
 
         <Grid container spacing={3}>
           {certificateData.map((cert, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index} sx={{ display: 'flex' }}>
               <Paper
                 elevation={2}
                 sx={{
@@ -75,6 +75,10 @@ const ResultsGallery = () => {
                   cursor: 'pointer',
                   borderRadius: 2,
                   transition: '0.3s',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  width: '100%',
                   '&:hover': {
                     transform: 'scale(1.03)',
                     '& .overlay': { opacity: 1 }
@@ -88,7 +92,9 @@ const ResultsGallery = () => {
                   src={cert.img}
                   alt={cert.name}
                   sx={{ width: '100%', height: '350px', objectFit: 'cover', display: 'block', bgcolor: '#e0e0e0' }}
-                  onError={(e) => { e.target.src = 'https://via.placeholder.com/300x400?text=IELTS+Certificate'; }}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => { 
+                    e.currentTarget.src = 'https://via.placeholder.com/300x400?text=IELTS+Certificate'; 
+                  }}
                 />
                 
                 {/* Ustki qavat (Overlay) */}
