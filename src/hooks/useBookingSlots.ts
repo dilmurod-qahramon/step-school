@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { TimeSlot } from '@/components/booking/TimeSlotTable';
 import type { BookingFormData } from '@/components/booking/BookingDialog';
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2lGVBj8CYZY-hjdctlaAhTqIWfyplr6D5roHITaF4brngSjEainkEc5vS_5okjLbf/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzszU_Lsrc5jbn--b8LKcfrFh5qU4V2fU7Mw21MUUGT34-G3lv2dbWhhEjOlcVzC-Dy/exec';
 
 interface UseBookingSlotsProps {
   teacherId: string;
