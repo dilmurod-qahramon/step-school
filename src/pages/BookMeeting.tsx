@@ -1,4 +1,4 @@
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { ArrowLeft, User } from 'lucide-react';
 import TimeSlotTable from '@/components/booking/TimeSlotTable';
@@ -9,16 +9,15 @@ import { toast } from 'sonner';
 
 const BookMeeting = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { teacherId } = useParams();
-  const teacherName = location.state?.teacherName || 'O\'qituvchi';
+  const { teacherName: encodedTeacherName } = useParams();
+  const teacherName = decodeURIComponent(encodedTeacherName || 'O\'qituvchi');
 
   const [selectedSlot, setSelectedSlot] = useState<{ date: string; time: string } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { bookedSlots, isLoading, createBooking, refetch } = useBookingSlots({
-    teacherId: teacherId || '',
+    teacherId: teacherName,
     teacherName,
   });
 
@@ -94,7 +93,7 @@ const BookMeeting = () => {
 
             {/* Time Slot Table */}
             <TimeSlotTable
-              teacherId={teacherId || ''}
+              teacherId={teacherName}
               teacherName={teacherName}
               bookedSlots={bookedSlots}
               onSlotSelect={handleSlotSelect}
