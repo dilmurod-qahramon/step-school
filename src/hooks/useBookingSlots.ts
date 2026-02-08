@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { format } from 'date-fns';
 import type { TimeSlot } from '@/components/booking/TimeSlotTable';
 import type { BookingFormData } from '@/components/booking/BookingDialog';
 
@@ -34,15 +35,23 @@ export const useBookingSlots = ({ teacherId, teacherName }: UseBookingSlotsProps
       const data = await response.json();
       
       if (data.success && Array.isArray(data.bookings)) {
-        setBookedSlots(data.bookings.map((booking: any) => ({
-          date: booking.date,
-          time: booking.time,
-          isBooked: true,
-          bookedBy: {
-            name: booking.name,
-            phone: booking.phone,
-          },
-        })));
+        setBookedSlots(data.bookings.map((booking: any) => {
+          // Parse date from ISO string (e.g., "2026-02-07T19:00:00.000Z" -> "2026-02-07")
+          const dateStr = format(new Date(booking.date), 'yyyy-MM-dd');
+          
+          // Parse time from ISO string (e.g., "1899-12-30T12:22:49.000Z" -> "12:22")
+          const timeStr = format(new Date(booking.time), 'HH:mm');
+          
+          return {
+            date: dateStr,
+            time: timeStr,
+            isBooked: true,
+            bookedBy: {
+              name: booking.name,
+              phone: booking.phone,
+            },
+          };
+        }));
       }
     } catch (err) {
       console.error('Error fetching bookings:', err);
