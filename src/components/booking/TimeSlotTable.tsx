@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { format, addDays, startOfWeek, isSameDay, isAfter, isBefore } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { ChevronLeft, ChevronRight, Clock, User, X } from 'lucide-react';
 
 export interface TimeSlot {
   date: string;
@@ -49,7 +50,7 @@ const TimeSlotTable = ({
   };
 
   const maxWeekStart = addDays(initialWeekStart.current, 7);
-  const latestAllowedDate = addDays(initialWeekStart.current, 13); // end of next week
+  const latestAllowedDate = addDays(initialWeekStart.current, 13);
   const canMoveNext = isBefore(weekStart, maxWeekStart);
   const canMovePrev = isAfter(weekStart, initialWeekStart.current);
 
@@ -65,73 +66,93 @@ const TimeSlotTable = ({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <span className="ml-3 text-muted-foreground">Yuklanmoqda...</span>
+      <div className="flex flex-col items-center justify-center py-16 gap-4">
+        <div className="relative">
+          <div className="w-12 h-12 border-4 border-primary/20 rounded-full"></div>
+          <div className="absolute top-0 left-0 w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <span className="text-muted-foreground font-medium">Ma'lumotlar yuklanmoqda...</span>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4">
       {/* Week Navigation */}
-      <div className="flex items-center justify-between mb-4">
-        <span className="font-semibold text-foreground">
-          {format(weekStart, 'd MMMM', { locale: uz })} - {format(addDays(weekStart, 6), 'd MMMM yyyy', { locale: uz })}
-        </span>
+      <div className="flex items-center justify-between bg-muted/50 rounded-xl p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <Clock className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Hafta</p>
+            <p className="font-semibold text-foreground">
+              {format(weekStart, 'd MMMM', { locale: uz })} - {format(addDays(weekStart, 6), 'd MMMM', { locale: uz })}
+            </p>
+          </div>
+        </div>
         <div className="flex items-center gap-2">
-          {canMovePrev && (
-            <button
-              onClick={handlePrevWeek}
-              className="px-3 py-2 rounded-lg bg-muted text-muted-foreground hover:bg-muted/90 transition-colors"
-            >
-              ← Avvalgi hafta
-            </button>
-          )}
+          <button
+            onClick={handlePrevWeek}
+            disabled={!canMovePrev}
+            className={cn(
+              "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+              canMovePrev
+                ? "bg-background border border-border hover:bg-accent text-foreground shadow-sm"
+                : "bg-muted text-muted-foreground cursor-not-allowed"
+            )}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
           <button
             onClick={handleNextWeek}
             disabled={!canMoveNext}
             className={cn(
-              "px-4 py-2 rounded-lg transition-colors",
+              "w-10 h-10 rounded-full flex items-center justify-center transition-all",
               canMoveNext
-                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
                 : "bg-muted text-muted-foreground cursor-not-allowed"
             )}
           >
-            Keyingi hafta →
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* Time Slot Grid */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+        <table className="w-full border-collapse bg-background">
           <thead>
             <tr>
-              <th className="p-2 border border-border bg-muted text-muted-foreground text-sm font-medium min-w-[70px]">
+              <th className="p-3 bg-muted/70 text-muted-foreground text-xs font-semibold uppercase tracking-wider min-w-[70px] border-b border-r border-border">
                 Vaqt
               </th>
               {weekDays.map((day) => (
                 <th 
                   key={day.toISOString()} 
                   className={cn(
-                    "p-2 border border-border text-sm font-medium min-w-[100px]",
+                    "p-3 text-xs font-semibold min-w-[110px] border-b border-r border-border last:border-r-0",
                     isSameDay(day, new Date()) 
                       ? "bg-primary text-primary-foreground" 
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted/70 text-muted-foreground"
                   )}
                 >
-                  <div>{format(day, 'EEEE', { locale: uz })}</div>
-                  <div className="text-xs opacity-80">{format(day, 'd MMM', { locale: uz })}</div>
+                  <div className="uppercase tracking-wider">{format(day, 'EEE', { locale: uz })}</div>
+                  <div className={cn(
+                    "text-lg font-bold mt-1",
+                    isSameDay(day, new Date()) ? "text-primary-foreground" : "text-foreground"
+                  )}>
+                    {format(day, 'd', { locale: uz })}
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {TIME_SLOTS.map((time) => (
-              <tr key={time}>
-                <td className="p-2 border border-border bg-muted text-center text-sm font-medium text-muted-foreground">
-                  {time}
+            {TIME_SLOTS.map((time, rowIdx) => (
+              <tr key={time} className={rowIdx % 2 === 0 ? 'bg-background' : 'bg-muted/20'}>
+                <td className="p-2 border-r border-b border-border text-center">
+                  <span className="text-sm font-semibold text-foreground">{time}</span>
                 </td>
                 {weekDays.map((day) => {
                   const bookedSlot = isSlotBooked(day, time);
@@ -142,32 +163,40 @@ const TimeSlotTable = ({
                   return (
                     <td 
                       key={`${dateStr}-${time}`}
-                      className="p-1 border border-border"
+                      className="p-1.5 border-r border-b border-border last:border-r-0"
                     >
                       {bookedSlot ? (
                         <div 
-                          className="p-2 rounded bg-destructive/20 text-destructive text-xs text-center cursor-not-allowed"
+                          className="h-full min-h-[52px] rounded-lg bg-destructive/10 border-2 border-destructive/30 p-2 flex flex-col items-center justify-center cursor-not-allowed"
                           title={`Band: ${bookedSlot.bookedBy?.name || 'Noma\'lum'}`}
                         >
-                          <div className="font-medium">Band</div>
-                          <div className="truncate text-[10px] opacity-80">
+                          <div className="flex items-center gap-1 text-destructive font-semibold text-xs">
+                            <User className="w-3 h-3" />
+                            <span>Band</span>
+                          </div>
+                          <div className="text-[10px] text-destructive/80 truncate max-w-full mt-0.5">
                             {bookedSlot.bookedBy?.name}
                           </div>
                         </div>
                       ) : isPast ? (
-                        <div className="p-2 rounded bg-muted text-muted-foreground text-xs text-center cursor-not-allowed">
-                          O'tgan
+                        <div className="h-full min-h-[52px] rounded-lg bg-muted/50 border border-border p-2 flex items-center justify-center cursor-not-allowed">
+                          <div className="flex items-center gap-1 text-muted-foreground text-xs">
+                            <X className="w-3 h-3" />
+                            <span>O'tgan</span>
+                          </div>
                         </div>
                       ) : isBeyondAllowed ? (
-                        <div className="p-2 rounded bg-muted text-muted-foreground text-xs text-center cursor-not-allowed">
-                          Mavjud emas
+                        <div className="h-full min-h-[52px] rounded-lg bg-muted/30 border border-dashed border-border p-2 flex items-center justify-center cursor-not-allowed">
+                          <span className="text-muted-foreground/60 text-xs">—</span>
                         </div>
                       ) : (
                         <button
                           onClick={() => onSlotSelect(dateStr, time)}
-                          className="w-full p-2 rounded bg-green-100 hover:bg-green-200 text-green-700 text-xs text-center transition-colors dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-400"
+                          className="w-full h-full min-h-[52px] rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border-2 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:border-emerald-400 dark:hover:border-emerald-600 transition-all duration-200 p-2 flex items-center justify-center group"
                         >
-                          Bo'sh
+                          <span className="text-emerald-700 dark:text-emerald-400 font-medium text-xs group-hover:scale-105 transition-transform">
+                            Bo'sh
+                          </span>
                         </button>
                       )}
                     </td>
@@ -180,18 +209,18 @@ const TimeSlotTable = ({
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 mt-4 text-sm">
+      <div className="flex flex-wrap gap-4 text-sm bg-muted/30 rounded-lg p-3">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-green-100 dark:bg-green-900/30"></div>
-          <span className="text-muted-foreground">Bo'sh</span>
+          <div className="w-5 h-5 rounded bg-emerald-50 dark:bg-emerald-950/30 border-2 border-emerald-200 dark:border-emerald-800"></div>
+          <span className="text-muted-foreground text-xs font-medium">Bo'sh</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-destructive/20"></div>
-          <span className="text-muted-foreground">Band</span>
+          <div className="w-5 h-5 rounded bg-destructive/10 border-2 border-destructive/30"></div>
+          <span className="text-muted-foreground text-xs font-medium">Band</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-muted"></div>
-          <span className="text-muted-foreground">O'tgan</span>
+          <div className="w-5 h-5 rounded bg-muted/50 border border-border"></div>
+          <span className="text-muted-foreground text-xs font-medium">O'tgan</span>
         </div>
       </div>
     </div>
