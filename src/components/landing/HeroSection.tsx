@@ -2,7 +2,7 @@ import { Box, Container, Typography, Button, AppBar, Toolbar, IconButton, Drawer
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/step_school_logo.JPG';
+import logo from '../../assets/step_school_logo.png';
 
 const navLinks = [
   { label: "Biz haqimizda", target: "about" },

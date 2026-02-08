@@ -1,5 +1,5 @@
 import { Box, Container, Typography, Link, Stack } from '@mui/material';
-import logo from '../../assets/step_school_logo.JPG';
+import logo from '../../assets/step_school_logo.png';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
