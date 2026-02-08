@@ -18,7 +18,7 @@ const SupportTeachers = () => {
   const navigate = useNavigate();
 
   const handleTeacherSelect = (teacher: { id: number; name: string }) => {
-    navigate(`/book-meeting/${teacher.id}`, { state: { teacherName: teacher.name } });
+    navigate(`/book-meeting/${encodeURIComponent(teacher.name)}`);
   };
 
   return (
