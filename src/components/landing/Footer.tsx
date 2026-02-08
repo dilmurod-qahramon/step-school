@@ -31,7 +31,7 @@ const Footer = () => {
               src={logo}
               alt="Step School"
               sx={{
-                height: 80,
+                height: 180,
                 mb: 2,
               }}
             />

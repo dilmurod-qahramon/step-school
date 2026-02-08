@@ -79,7 +79,7 @@ const HeroSection = () => {
                 component="img"
                 src={logo}
                 alt="Step School"
-                sx={{ height: 36 }}
+                sx={{ width: 100 }}
               />
               <Typography 
                 variant="h6" 
@@ -178,28 +178,6 @@ const HeroSection = () => {
           }}
         >
           <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' }, position: 'relative', zIndex: 1 }}>
-            <Box
-              sx={{
-                display: 'inline-block',
-                bgcolor: 'rgba(255, 255, 255, 0.15)',
-                px: 2,
-                py: 0.5,
-                borderRadius: 5,
-                mb: 3,
-              }}
-            >
-              <Typography 
-                variant="body2" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontWeight: 500,
-                  letterSpacing: 1,
-                }}
-              >
-                🎓 #1 Ingliz tili markazi
-              </Typography>
-            </Box>
-            
             <Typography
               variant="h1"
               sx={{
@@ -361,7 +339,7 @@ const HeroSection = () => {
               sx={{
                 position: 'relative',
                 zIndex: 1,
-                maxWidth: 420,
+                maxWidth: 820,
                 width: '100%',
                 height: 'auto',
                 filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3))',
