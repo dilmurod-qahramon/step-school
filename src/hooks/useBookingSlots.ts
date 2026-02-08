@@ -50,7 +50,7 @@ export const useBookingSlots = ({ teacherId, teacherName }: UseBookingSlotsProps
     } finally {
       setIsLoading(false);
     }
-  }, [teacherId]);
+  }, [teacherName]);
 
   // Create a new booking
   const createBooking = async (

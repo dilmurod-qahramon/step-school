@@ -1,11 +1,11 @@
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { ArrowLeft, User, CheckCircle } from 'lucide-react';
+import { ArrowLeft, User } from 'lucide-react';
 import TimeSlotTable from '@/components/booking/TimeSlotTable';
 import BookingDialog, { BookingFormData } from '@/components/booking/BookingDialog';
 import { useBookingSlots } from '@/hooks/useBookingSlots';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 const BookMeeting = () => {
   const navigate = useNavigate();
@@ -16,9 +16,8 @@ const BookMeeting = () => {
   const [selectedSlot, setSelectedSlot] = useState<{ date: string; time: string } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
-  const { bookedSlots, isLoading, createBooking } = useBookingSlots({
+  const { bookedSlots, isLoading, createBooking, refetch } = useBookingSlots({
     teacherId: teacherId || '',
     teacherName,
   });
@@ -41,54 +40,17 @@ const BookMeeting = () => {
       await createBooking(selectedSlot.date, selectedSlot.time, formData);
       setIsDialogOpen(false);
       setSelectedSlot(null);
-      setIsSuccess(true);
+      toast.success('Uchrashuv muvaffaqiyatli band qilindi!');
+      // Refetch to update the UI with the new booking
+      await refetch();
     } catch (error) {
       console.error('Booking failed:', error);
+      toast.error('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
       throw error;
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  if (isSuccess) {
-    return (
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-primary">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center h-16">
-              <button
-                onClick={() => navigate('/')}
-                className="text-primary-foreground mr-4 p-2 hover:bg-primary/90 rounded-lg transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <h1 className="text-lg font-bold text-primary-foreground">
-                Uchrashuv belgilash
-              </h1>
-            </div>
-          </div>
-        </header>
-
-        <div className="container mx-auto px-4 pt-24 pb-8 max-w-lg">
-          <Card className="text-center">
-            <CardContent className="pt-8 pb-8">
-              <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-foreground mb-2">
-                So'rovingiz qabul qilindi!
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                {teacherName} bilan uchrashuv so'rovi yuborildi. Tez orada siz bilan bog'lanamiz.
-              </p>
-              <Button onClick={() => navigate('/')}>
-                Bosh sahifaga qaytish
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">
