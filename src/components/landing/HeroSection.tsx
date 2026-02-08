@@ -3,6 +3,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/step_school_logo.png';
+import TeacherLoginDialog from '@/components/booking/TeacherLoginDialog';
 
 const navLinks = [
   { label: "Biz haqimizda", target: "about" },
@@ -14,6 +15,7 @@ const navLinks = [
 
 const HeroSection = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const navigate = useNavigate();
 
   const scrollToSection = (id: string) => {
@@ -25,7 +27,17 @@ const HeroSection = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const goToSupportTeachers = () => {
+  const handleBookingClick = () => {
+    const isAuthenticated = sessionStorage.getItem('teacherAuth') === 'true';
+    if (isAuthenticated) {
+      navigate('/support-teachers');
+    } else {
+      setLoginOpen(true);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setLoginOpen(false);
     navigate('/support-teachers');
   };
 
@@ -255,7 +267,7 @@ const HeroSection = () => {
               <Button
                 variant="outlined"
                 size="large"
-                onClick={goToSupportTeachers}
+                onClick={handleBookingClick}
                 sx={{
                   borderColor: 'rgba(255, 255, 255, 0.5)',
                   color: 'white',
@@ -275,6 +287,12 @@ const HeroSection = () => {
                 Support teacher band qilish
               </Button>
             </Box>
+
+            <TeacherLoginDialog
+              isOpen={loginOpen}
+              onClose={() => setLoginOpen(false)}
+              onSuccess={handleLoginSuccess}
+            />
             <Box 
               sx={{ 
                 display: 'flex', 
